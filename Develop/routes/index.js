@@ -18,7 +18,7 @@ router.get("*", (req, res) => {
 
 // API Routes
 router.get("/api/notes", (req, res) => {
-  fs.readFile("../db/db.json", (err, data) => {
+  fs.readFile("../Develop/db/db.json", (err, data) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Failed to read notes" });
@@ -30,7 +30,7 @@ router.get("/api/notes", (req, res) => {
 router.post("/api/notes", (req, res) => {
   const newNote = { id: generateUniqueId(), ...req.body };
 
-  fs.readFile("../db/db.json", (err, data) => {
+  fs.readFile("../Develop/db/db.json", (err, data) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Failed to read notes" });
@@ -39,13 +39,17 @@ router.post("/api/notes", (req, res) => {
     const notes = JSON.parse(data);
     notes.push(newNote);
 
-    fs.writeFile("../db/db.json", JSON.stringify(notes, null, 2), (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Failed to save note" });
+    fs.writeFile(
+      "../Develop/db/db.json",
+      JSON.stringify(notes, null, 2),
+      (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: "Failed to save note" });
+        }
+        res.json(newNote);
       }
-      res.json(newNote);
-    });
+    );
   });
 });
 
